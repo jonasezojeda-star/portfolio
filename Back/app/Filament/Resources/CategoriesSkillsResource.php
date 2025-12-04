@@ -7,6 +7,7 @@ use App\Filament\Resources\CategoriesSkillsResource\RelationManagers;
 use App\Models\CategoriesSkills;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -27,10 +28,22 @@ class CategoriesSkillsResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('title'),
-                FileUpload::make('icon')
-                    ->disk(env('FILESYSTEM_DISK'))
-                    ->directory('categories-skills'),
+                TextInput::make('title')
+                    ->required(),
+                TextInput::make('icon')
+                    ->required()
+                    ->suffixAction(
+                        Forms\Components\Actions\Action::make('verIconos')
+                            ->icon('heroicon-o-link')
+                            ->url('https://lucide.dev/icons/', shouldOpenInNewTab: true)
+                            ->tooltip('Ver lista de íconos')
+                    ),
+                Select::make('skills')
+                    ->label('Skills')
+                    ->multiple()
+                    ->relationship('skills', 'name') // relación many-to-many
+                    ->searchable()
+                    ->preload(),
             ]);
     }
 
@@ -38,7 +51,7 @@ class CategoriesSkillsResource extends Resource
     {
         return $table
             ->columns([
-                ImageColumn::make('icon'),
+                TextColumn::make('icon'),
                 TextColumn::make('title'),
 
             ])

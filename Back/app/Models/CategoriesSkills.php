@@ -15,4 +15,10 @@ class CategoriesSkills extends Model
         'title',
         'icon',
     ];
+
+    //Relaciones
+    public function skills()
+    {
+        return $this->belongsToMany(Skills::class, 'category_skill_skill', 'category_skill_id', 'skill_id');
+    }
 }

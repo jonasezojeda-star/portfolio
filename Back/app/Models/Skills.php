@@ -12,4 +12,10 @@ class Skills extends Model
     protected $fillable = [
         'name',
     ];
+
+    //Relaciones
+    public function categories()
+    {
+        return $this->belongsToMany(CategoriesSkills::class, 'category_skill_skill', 'skill_id', 'category_skill_id');
+    }
 }
